@@ -3,12 +3,18 @@
 
   <xacro:macro name="qube" params="prefix">
 
-    <!-- Black base box -->
+    <!-- Parameteriserte verdier for enkel justering -->
+    <xacro:property name="base_size"   value="0.1"/>
+    <xacro:property name="disk_radius" value="0.048"/>
+    <xacro:property name="disk_length" value="0.018"/>
+    <xacro:property name="cross_size"  value="0.09"/>
+
+    <!-- Svart boks (base) -->
     <link name="${prefix}base_link">
       <visual>
-        <origin xyz="0 0 0.05"/>
+        <origin xyz="0 0 ${base_size/2}"/>
         <geometry>
-          <box size="0.1 0.1 0.1"/>
+          <box size="${base_size} ${base_size} ${base_size}"/>
         </geometry>
         <material name="black">
           <color rgba="0.1 0.1 0.1 1"/>
@@ -16,11 +22,11 @@
       </visual>
     </link>
 
-    <!-- Red disk (wide flat puck shape) -->
+    <!-- Rød disk -->
     <link name="${prefix}disk_link">
       <visual>
         <geometry>
-          <cylinder radius="0.048" length="0.018"/>
+          <cylinder radius="${disk_radius}" length="${disk_length}"/>
         </geometry>
         <material name="red">
           <color rgba="0.8 0.05 0.05 1"/>
@@ -28,12 +34,12 @@
       </visual>
     </link>
 
-    <!-- White cross line 1 (horizontal) -->
+    <!-- Hvitt kors linje 1 (horisontal) -->
     <link name="${prefix}pointer_h_link">
       <visual>
         <origin xyz="0 0 0.01"/>
         <geometry>
-          <box size="0.09 0.004 0.002"/>
+          <box size="${cross_size} 0.004 0.002"/>
         </geometry>
         <material name="white">
           <color rgba="1 1 1 1"/>
@@ -41,12 +47,12 @@
       </visual>
     </link>
 
-    <!-- White cross line 2 (vertical) -->
+    <!-- Hvitt kors linje 2 (vertikal) -->
     <link name="${prefix}pointer_v_link">
       <visual>
         <origin xyz="0 0 0.01"/>
         <geometry>
-          <box size="0.004 0.09 0.002"/>
+          <box size="0.004 ${cross_size} 0.002"/>
         </geometry>
         <material name="white">
           <color rgba="1 1 1 1"/>
@@ -54,22 +60,22 @@
       </visual>
     </link>
 
-    <!-- Motor joint -->
+    <!-- Motorledd - disken spinner på toppen av basen -->
     <joint name="${prefix}motor_joint" type="continuous">
       <parent link="${prefix}base_link"/>
       <child link="${prefix}disk_link"/>
-      <origin xyz="0 0 0.1"/>
+      <origin xyz="0 0 ${base_size + disk_length/2}"/>
       <axis xyz="0 0 1"/>
     </joint>
 
-    <!-- Horizontal cross line fixed to disk -->
+    <!-- Horisontal korslinje festet til disk -->
     <joint name="${prefix}pointer_h_joint" type="fixed">
       <parent link="${prefix}disk_link"/>
       <child link="${prefix}pointer_h_link"/>
       <origin xyz="0 0 0"/>
     </joint>
 
-    <!-- Vertical cross line fixed to disk -->
+    <!-- Vertikal korslinje festet til disk -->
     <joint name="${prefix}pointer_v_joint" type="fixed">
       <parent link="${prefix}disk_link"/>
       <child link="${prefix}pointer_v_link"/>
