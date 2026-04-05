@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="qube" params="prefix">
+
+    <!-- Black base box -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0.05"/>
+        <geometry>
+          <box size="0.1 0.1 0.1"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1"/>
+        </material>
+      </visual>
+    </link>
+
+    <!-- Red disk (wide flat puck shape) -->
+    <link name="${prefix}disk_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.048" length="0.018"/>
+        </geometry>
+        <material name="red">
+          <color rgba="0.8 0.05 0.05 1"/>
+        </material>
+      </visual>
+    </link>
+
+    <!-- White cross line 1 (horizontal) -->
+    <link name="${prefix}pointer_h_link">
+      <visual>
+        <origin xyz="0 0 0.01"/>
+        <geometry>
+          <box size="0.09 0.004 0.002"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+    </link>
+
+    <!-- White cross line 2 (vertical) -->
+    <link name="${prefix}pointer_v_link">
+      <visual>
+        <origin xyz="0 0 0.01"/>
+        <geometry>
+          <box size="0.004 0.09 0.002"/>
+        </geometry>
+        <material name="white">
+          <color rgba="1 1 1 1"/>
+        </material>
+      </visual>
+    </link>
+
+    <!-- Motor joint -->
+    <joint name="${prefix}motor_joint" type="continuous">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}disk_link"/>
+      <origin xyz="0 0 0.1"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+
+    <!-- Horizontal cross line fixed to disk -->
+    <joint name="${prefix}pointer_h_joint" type="fixed">
+      <parent link="${prefix}disk_link"/>
+      <child link="${prefix}pointer_h_link"/>
+      <origin xyz="0 0 0"/>
+    </joint>
+
+    <!-- Vertical cross line fixed to disk -->
+    <joint name="${prefix}pointer_v_joint" type="fixed">
+      <parent link="${prefix}disk_link"/>
+      <child link="${prefix}pointer_v_link"/>
+      <origin xyz="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>
